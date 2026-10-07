@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اتعلّم برمجة — من الصفر لأول مشروع</title>
+<meta name="description" content="موقع لتعلم البرمجة بالعربي: HTML وCSS وJavaScript وPython مع محرر أكواد تجرّب فيه مباشرة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F6FB; --card:#FFFFFF; --ink:#14213D; --muted:#55607A;
+  --blue:#2F5BEA; --mint:#1FA37A; --sun:#F2B33D; --line:#D8E0EE;
+  --code-bg:#14213D; --code-fg:#E8EEFF;
+  --font:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;
+  --mono:'Fira Code',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--paper);color:var(--ink);line-height:1.8;font-size:17px}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* nav */
+header{position:sticky;top:0;z-index:10;background:rgba(243,246,251,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
+.logo b{font-family:var(--mono);background:var(--blue);color:#fff;padding:0 8px;border-radius:6px;direction:ltr}
+.links{display:flex;gap:24px;font-size:15px;color:var(--muted)}
+.links a:hover{color:var(--blue)}
+.btn{display:inline-block;background:var(--blue);color:#fff;font-weight:700;padding:10px 22px;border-radius:10px;border:0;cursor:pointer;font-family:var(--font);font-size:16px;transition:background .2s}
+.btn:hover{background:#1f44c4}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center;padding:72px 0 64px}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.35;font-weight:700}
+.hero p{color:var(--muted);margin:18px 0 28px;max-width:46ch}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+
+/* live editor */
+.editor{background:var(--code-bg);border-radius:16px;overflow:hidden;box-shadow:0 18px 40px -18px rgba(20,33,61,.5);direction:ltr}
+.tabs{display:flex;gap:4px;padding:10px 12px 0;background:#0e1830}
+.tab{font-family:var(--mono);font-size:13px;color:#8FA0C8;background:transparent;border:0;padding:8px 14px;border-radius:8px 8px 0 0;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--code-bg);color:#fff}
+textarea{width:100%;height:170px;background:transparent;color:var(--code-fg);font-family:var(--mono);font-size:14px;line-height:1.7;border:0;resize:none;padding:16px;direction:ltr;text-align:left}
+textarea:focus{outline:none}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;border-top:1px solid #2a3a60}
+.bar span{color:#8FA0C8;font-size:12px;font-family:var(--font);direction:rtl}
+.run{background:var(--mint);color:#fff;border:0;border-radius:8px;padding:7px 18px;font-family:var(--font);font-weight:700;cursor:pointer;font-size:14px}
+.run:hover{background:#178a67}
+pre#out{min-height:76px;max-height:140px;overflow:auto;background:#0e1830;color:#9AE6C2;font-family:var(--mono);font-size:13.5px;padding:14px 16px;white-space:pre-wrap}
+pre#out.err{color:#FFB4A8}
+
+/* sections */
+section{padding:64px 0}
+h2{font-size:clamp(26px,3.4vw,36px);margin-bottom:10px}
+.sub{color:var(--muted);margin-bottom:36px;max-width:60ch}
+
+/* paths */
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.path{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:14px;padding:24px}
+.path h3{font-size:20px;margin-bottom:6px}
+.path .lvl{font-size:13px;color:var(--c);font-weight:700;margin-bottom:10px}
+.path p{color:var(--muted);font-size:15px;margin-bottom:14px}
+.path ul{list-style:none;font-size:14.5px;border-top:1px dashed var(--line);padding-top:12px}
+.path li{padding:3px 0}
+.path li::before{content:"✓ ";color:var(--c);font-weight:700}
+
+/* steps */
+.steps{background:var(--ink);color:#fff;border-radius:20px;padding:48px 36px}
+.steps h2{color:#fff}
+.steps ol{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;margin-top:28px}
+.steps li{counter-increment:s;position:relative;padding-top:56px}
+.steps li::before{content:counter(s);position:absolute;top:0;right:0;width:42px;height:42px;border-radius:50%;background:var(--sun);color:var(--ink);font-weight:700;display:grid;place-items:center;font-size:18px}
+.steps li b{display:block;font-size:19px;margin-bottom:4px}
+.steps li span{color:#B9C4E2;font-size:15px}
+
+/* cta + footer */
+.cta{text-align:center}
+.cta form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.cta input{font-family:var(--font);font-size:16px;padding:11px 16px;border:2px solid var(--line);border-radius:10px;min-width:260px;background:#fff}
+.cta input:focus{border-color:var(--blue);outline:none}
+#msg{margin-top:14px;color:var(--mint);font-weight:700;min-height:28px}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14px;text-align:center}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:40px}
+  .links{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav aria-label="القائمة الرئيسية">
+      <a class="logo" href="#"><b>&lt;/&gt;</b> اتعلّم برمجة</a>
+      <div class="links">
+        <a href="#paths">المسارات</a>
+        <a href="#how">إزاي تتعلم</a>
+        <a href="#join">ابدأ</a>
+      </div>
+      <a class="btn" href="#join">سجّل مجانًا</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <h1>اكتب أول كود لك النهارده، من غير ما تحمّل أي حاجة</h1>
+      <p>دروس بالعربي بتبدأ من الصفر، وكل درس فيه محرر تجرّب فيه الكود وتشوف النتيجة في ثانية.</p>
+      <div class="actions">
+        <a class="btn" href="#paths">اختار مسارك</a>
+        <a class="btn ghost" href="#how">إزاي بتشتغل؟</a>
+      </div>
+    </div>
+
+    <div class="editor" id="editor">
+      <div class="tabs" role="tablist" aria-label="أمثلة">
+        <button class="tab" role="tab" aria-selected="true" data-i="0">hello.js</button>
+        <button class="tab" role="tab" aria-selected="false" data-i="1">loop.js</button>
+        <button class="tab" role="tab" aria-selected="false" data-i="2">function.js</button>
+      </div>
+      <textarea id="code" spellcheck="false" aria-label="محرر الكود"></textarea>
+      <div class="bar"><span>عدّل في الكود وجرّب بنفسك</span><button class="run" id="run">▶ شغّل الكود</button></div>
+      <pre id="out" aria-live="polite">// النتيجة هتظهر هنا</pre>
+    </div>
+  </div>
+
+  <section id="paths">
+    <h2>اختار المسار اللي يناسبك</h2>
+    <p class="sub">كل مسار مقسم لدروس قصيرة وتمارين، وتخلص بمشروع صغير تحطه في ملفاتك.</p>
+    <div class="paths">
+      <article class="path" style="--c:#E5602F">
+        <h3>HTML و CSS</h3><div class="lvl">مبتدئ</div>
+        <p>اعمل صفحة ويب كاملة وشكلها حلو.</p>
+        <ul><li>العناوين والروابط والصور</li><li>الألوان والخطوط</li><li>Flexbox و Grid</li></ul>
+      </article>
+      <article class="path" style="--c:#2F5BEA">
+        <h3>JavaScript</h3><div class="lvl">مبتدئ → متوسط</div>
+        <p>خلّي الصفحة تتفاعل مع المستخدم.</p>
+        <ul><li>المتغيرات والشروط</li><li>الدوال والمصفوفات</li><li>التعامل مع DOM</li></ul>
+      </article>
+      <article class="path" style="--c:#1FA37A">
+        <h3>Python</h3><div class="lvl">مبتدئ</div>
+        <p>أسهل لغة تبدأ بيها، وبتتستخدم في كل مكان.</p>
+        <ul><li>أساسيات اللغة</li><li>التعامل مع الملفات</li><li>مشروع أتمتة بسيط</li></ul>
+      </article>
+      <article class="path" style="--c:#B7791F">
+        <h3>Git و GitHub</h3><div class="lvl">كل المستويات</div>
+        <p>احفظ شغلك وارفعه ليشوفه الناس.</p>
+        <ul><li>commit و branch</li><li>رفع المشروع</li><li>نشر موقع مجانًا</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="steps">
+      <h2>إزاي تتعلم هنا</h2>
+      <ol>
+        <li><b>اقرأ الدرس</b><span>شرح مختصر بمثال واحد واضح.</span></li>
+        <li><b>جرّب الكود</b><span>عدّل في المحرر وشوف النتيجة على طول.</span></li>
+        <li><b>حل التمرين</b><span>تمرين صغير يثبت المعلومة.</span></li>
+        <li><b>ابني مشروع</b><span>في آخر كل مسار هتطلع بحاجة تفتخر بيها.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="join" class="cta">
+    <h2>جاهز تبدأ؟</h2>
+    <p class="sub" style="margin-inline:auto">اكتب إيميلك وهنبعتلك خطة أول أسبوع.</p>
+    <form id="form" novalidate>
+      <input type="email" id="email" placeholder="you@example.com" aria-label="البريد الإلكتروني" dir="ltr" required>
+      <button class="btn" type="submit">ابعتلي الخطة</button>
+    </form>
+    <div id="msg" role="status"></div>
+  </section>
+</main>
+
+<footer>© <span id="yr"></span> اتعلّم برمجة — اتعمل بحب للمبرمجين الجداد</footer>
+
+<script>
+const samples = [
+`const name = "أحمد";
+console.log("أهلاً يا " + name + " 👋");
+console.log("أنت بدأت تتعلم برمجة!");`,
+
+`for (let i = 1; i <= 5; i++) {
+  console.log("الرقم: " + i);
+}`,
+
+`function square(n) {
+  return n * n;
+}
+console.log(square(4));
+console.log(square(9));`
+];
+
+const code = document.getElementById('code');
+const out  = document.getElementById('out');
+const tabs = document.querySelectorAll('.tab');
+
+function load(i){
+  code.value = samples[i];
+  tabs.forEach((t,k)=>t.setAttribute('aria-selected', k===i));
+  out.className=''; out.textContent='// النتيجة هتظهر هنا';
+}
+tabs.forEach(t => t.addEventListener('click', () => load(+t.dataset.i)));
+load(0);
+
+document.getElementById('run').addEventListener('click', () => {
+  const lines = [];
+  const fakeConsole = { log: (...a) => lines.push(a.map(String).join(' ')) };
+  out.className = '';
+  try {
+    new Function('console', code.value)(fakeConsole);
+    out.textContent = lines.length ? lines.join('\n') : '// الكود اشتغل بس ما طبعش حاجة';
+  } catch (e) {
+    out.className = 'err';
+    out.textContent = 'خطأ: ' + e.message;
+  }
+});
+
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = document.getElementById('email').value.trim();
+  const msg = document.getElementById('msg');
+  if (!/^\S+@\S+\.\S+$/.test(v)) { msg.style.color = '#C0392B'; msg.textContent = 'اكتب إيميل صحيح.'; return; }
+  msg.style.color = ''; msg.textContent = 'تم التسجيل! هنبعتلك الخطة قريب.';
+  e.target.reset();
+});
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
